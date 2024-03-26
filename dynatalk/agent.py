@@ -6,13 +6,16 @@ class Agent:
     Generally speaking, agents running in the system are instantiated from my subclasses. I will interpret the message I received. If I understand it, I will execute the semantics of the message, possibly replying asynchronously with the result of the calculation as needed;  If I do not understand the message, I reply with "Message Not Understood." If there is an error in interpreting the message along the way, I reply with an error message.
     """
 
-    def __init__(self, id, receive_own_broadcasts=False, debugging=False) -> None:
+    def __init__(self, id=None, receive_own_broadcasts=False, debugging=False) -> None:
         self._RESPONSE_ACTION_NAME = "[response]"
         self._ERROR_ACTION_NAME = "[error]"
         self._futures = {}
 
         self.supervisor = None
-        self.id = id  # agent id
+        if id:
+            self.id = id  # agent id
+        else:
+            self.id = self.__class__.__name__
         self.current_message = None
 
         # for debugging

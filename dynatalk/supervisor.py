@@ -9,6 +9,8 @@ class Supervisor:
     """
 
     def __init__(self) -> None:
+        self.broadcastFlag = "[broadcast]"
+
         self.agents = {}
         # self.initAgents()
         self.space = MQTTSpace(self)
@@ -30,6 +32,10 @@ class Supervisor:
         if message:
             # log
             # print("(Supervisor) valid message: ", message)
+            if message["to"] == self.broadcastFlag:
+                for i in self.agents.values():
+                    i._receive(message)
+
             if message["to"] in self.agents:
                 self.agents[message["to"]]._receive(message)
 

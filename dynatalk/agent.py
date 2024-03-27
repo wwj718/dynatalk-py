@@ -9,7 +9,9 @@ class Agent:
     def __init__(self, id=None, receive_own_broadcasts=False, debugging=False) -> None:
         self._RESPONSE_ACTION_NAME = "[response]"
         self._ERROR_ACTION_NAME = "[error]"
+        self.broadcastFlag = "[broadcast]"
         self._futures = {}
+        self.availableActions = {}
 
         self.supervisor = None
         if id:
@@ -47,6 +49,11 @@ class Agent:
         if agentName == self._RESPONSE_ACTION_NAME:
             #Handle incoming responses. Only useful when agent is used as callee
             # console.debug("Handle incoming response", message);
+            # process help response
+            args_value = message["action"]["args"]["value"]
+            if (type(args_value) == dict and args_value.get("help")):
+                self.availableActions[message["from"]] = args_value.get("help")
+                
             # process _futures
             future = self._futures.get(parent_id)
             if future:
@@ -137,7 +144,7 @@ class Agent:
         message = self.generateMessage(parent_id, agentName, actionName, args)
         return self.send(message)
 
-    def respond_with(self, value):
+    def respondWith(self, value):
         # Sends a response with the given value.
         parent_id = self.current_message["meta"]["id"]
         to = self.current_message["from"]
@@ -162,11 +169,34 @@ class Agent:
     
         self.send(message)
 
+    def ping(self):
+        self.respondWith("pong")
+
+    def broadcast(self, actionName, args):
+        self.sendTo(self.broadcastFlag, actionName, args)
+
+    def broadcastHelp(self):
+        self.broadcast("help", [])
+
+        
 
 class PyDemoAgent(Agent):
 
     def echo(self, content):
-        self.respond_with(content)
+        self.respondWith(content)
 
     def add(self, a, b):
-        self.respond_with(a+b)
+        self.respondWith(a+b)
+    
+    def help(self):
+        help = {
+          "add": {
+              "description": "add a and b",
+              "args": ["aNumber", "aNumber"]
+            },
+          "echo": {
+              "description": "echo the content",
+              "args": ["aString"]
+            }
+          }
+        self.respondWith({"help": help})

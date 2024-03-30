@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dynatalk"
-version = "0.7.0"
+version = "0.7.2"
 description = ""
 authors = ["wwj718 <wuwenjie718@gmail.com>"]
 readme = "README.md"

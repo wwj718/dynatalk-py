@@ -55,6 +55,8 @@ def main():
     formatter = "[%(asctime)s] :: %(levelname)s :: %(name)s :: %(message)s"
     formatter = "%(asctime)s :: %(levelname)s :: %(message)s"
     logging.basicConfig(level=logging.INFO, format=formatter)
+    # loop = asyncio.new_event_loop() # to support thread
+    # asyncio.set_event_loop(loop)
     asyncio.get_event_loop().run_until_complete(broker.start())
     asyncio.get_event_loop().run_forever()
 

@@ -51,7 +51,7 @@ class Supervisor:
                 print("(Supervisor) bad message")
 
         except Exception as e:
-            print("(Supervisor) parseToJson error: " + e)
+            print("(Supervisor) parseToJson error: " + str(e))
 
         return None
 

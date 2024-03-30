@@ -48,3 +48,21 @@ print(agent.availableActions)
 ```bash
 dynatalk-monitor
 ```
+
+## FAQ
+
+### Set up MQTT
+
+Use environment variables to set up MQTT.
+
+
+default is:
+
+```
+MQTT_HOST: 127.0.0.1
+MQTT_PORT: 1883
+MQTT_USERNAME: guest
+MQTT_PASSWORD: test
+```
+
+[How to set environment variables in Python?](https://stackoverflow.com/questions/5971312/how-to-set-environment-variables-in-python)

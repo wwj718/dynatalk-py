@@ -1,5 +1,6 @@
 import json
 import os
+import time
 import traceback
 
 import paho.mqtt.client as mqtt
@@ -25,6 +26,14 @@ class MQTTSpace:
         self.mqtt_client.username_pw_set(username, password)
         self.mqtt_client.connect(host, port, 60)
         self.mqtt_client.loop_start()  # non-blocking
+
+        begin = time.time()
+        while True:
+            time.sleep(0.1)
+            if self.mqtt_client.is_connected():
+                break
+            if time.time() - begin > 3:
+                print("Unable to connect to MQTT broker: timedout")
 
     # The callback for when the client receives a CONNACK response from the server.
     def onConnect(self, client, userdata, flags, rc):
